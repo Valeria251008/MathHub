@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<title>Resolución de Ecuaciones</title>
+        <meta charset="UTF-8">
+        <style>
+			 * {
+				margin:0px;
+			}
+			
+            .correcto { color: green; font-weight: bold; }
+            .incorrecto { color: red; }
+            .paso-completado { font-weight: bold; color: #333; margin: 10px 0; }
+            .ayuda-texto { color: #555; font-style: italic; background: #f9f9f9; padding: 5px; border-left: 3px solid #ffd700; margin: 10px 0; }
+            #btnAyuda { background-color: #ffd700; border: 1px solid #ccc; cursor: pointer; display: none; margin-left: 10px; }
+            
+            #cabecera{
+				text-align:center;
+				background-color:cornflowerblue;
+				padding:20px;
+			}
+			
+			#menu{
+				text-align:center;
+				padding:20px;
+				background-color:white;
+			}
+            
+            #contenido{
+				border:2px solid blue;
+				border-radius: 20px;
+				padding:20px;
+				margin:20px;
+				text-align:center;
+				background-color:white;
+			}
+			
+			body {
+			  font-family: "Delius", cursive;
+			  font-weight: 400;
+			  font-style: normal;
+			  background-image: url('fondo_matematicas.png');
+
+			}
+			
+			p,button {
+				margin:8px;
+			}
+        </style>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Delius&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <div id="cabecera">
+            <h1>Resolución de Ecuaciones</h1>
+        </div>
+        <div id="menu">
+            <a href="Ecuaciones.html">Ecuaciones</a>
+        </div>
+        <div id="contenido">    
+            <p><strong>√(x+5)-x=3</strong></p>
+
+            <div id="contenedorPaso1">
+                <input type="text" id="respuesta1" placeholder="Escribe aquí tu respuesta">
+                <button onclick="comprobarPaso1()">Comprobar</button>
+            </div>
+
+            <div id="contenedorPaso2" style="display: none;">
+                <input type="text" id="respuesta2" placeholder="Siguiente paso...">
+                <button onclick="comprobarPaso2()">Comprobar</button>
+            </div>
+
+            <div id="contenedorPaso3" style="display: none;">
+                <input type="text" id="respuesta3" placeholder="Siguiente paso...">
+                <button onclick="comprobarPaso3()">Comprobar</button>
+            </div>
+            
+            <div id="contenedorPaso4" style="display: none;">
+                <input type="text" id="respuesta4" placeholder="Último paso...">
+                <button onclick="comprobarPaso4()">Comprobar</button>
+            </div>
+            
+            <p><strong>Solución:</strong></p>
+             
+            <div id="contenedorSolucion" style="display: none;">
+                <input type="text" id="solucion" placeholder="Introduce la solución">
+                <button onclick="comprobarSolucion()">Comprobar</button>
+            </div>
+            
+            <button id="btnAyuda" onclick="mostrarAyuda()">¿Necesitas ayuda?</button>
+            <p id="textoAyuda" class="ayuda-texto" style="display: none;"></p>
+
+            <p id="mensaje"></p>
+        </div>
+
+        <script>
+            // Respuestas correctas
+            const paso1 = "√(x+5)=x+3"; 
+            const paso2 = "x+5=(x+3)²"; 
+            const paso3 = "x+5=x²+6x+9"; 
+            const paso4 = "x²+5x+4=0";
+            const solucion = "-1";
+            
+            var pistas = {
+                1: "Pista: Aísla la raíz dejando el término √(x+5) solo en el miembro izquierdo. Pasa la 'x' sumando al otro lado.",
+				2: "Pista: Para eliminar la raíz cuadrada, eleva ambos miembros de la ecuación al cuadrado.",
+				3: "Pista: Desarrolla el producto notable del miembro derecho usando la fórmula: (a+b)² = a² + 2ab + b².",
+				4: "Pista: Pasa todos los términos a un solo miembro (por ejemplo, al derecho) para igualar la ecuación a cero y simplifica.",
+				"sol": "Pista: Resuelve la ecuación de segundo grado x² + 5x + 4 = 0. ¡Cuidado! Comprueba cuál de las soluciones es válida en la ecuación raíz original."
+            };
+            
+            let pasoActual = 1; 
+            let parrafoMensaje = document.getElementById("mensaje");
+            let btnAyuda = document.getElementById("btnAyuda");
+            let areaAyuda = document.getElementById("textoAyuda");
+
+            function mostrarAyuda() {
+                areaAyuda.textContent = pistas[pasoActual] || pistas["sol"];
+                areaAyuda.style.display = "block";
+            }
+
+            function gestionarFallo() {
+                parrafoMensaje.textContent = "Incorrecto. Inténtalo de nuevo.";
+                parrafoMensaje.className = "incorrecto";
+                btnAyuda.style.display = "inline-block"; 
+            }
+
+            function limpiarAyudaYPasar(siguientePaso) {
+                parrafoMensaje.textContent = "";
+                btnAyuda.style.display = "none";    
+                areaAyuda.style.display = "none";   
+                pasoActual = siguientePaso;         
+            }
+
+            function comprobarPaso1() {
+                let textoIntroducido = document.getElementById("respuesta1").value.trim();
+                if (textoIntroducido.toLowerCase() === paso1.toLowerCase()) {
+                    document.getElementById("contenedorPaso1").innerHTML = '<p class="paso-completado">' + textoIntroducido + '</p>';
+                    limpiarAyudaYPasar(2);
+                    document.getElementById("contenedorPaso2").style.display = "block";
+                } else { gestionarFallo(); }
+            }
+            
+            function comprobarPaso2() {
+                let textoIntroducido = document.getElementById("respuesta2").value.trim();
+                if (textoIntroducido.toLowerCase() === paso2.toLowerCase()) {
+                    document.getElementById("contenedorPaso2").innerHTML = '<p class="paso-completado">' + textoIntroducido + '</p>';
+                    limpiarAyudaYPasar(3);
+                    document.getElementById("contenedorPaso3").style.display = "block";
+                } else { gestionarFallo(); }
+            }
+
+            function comprobarPaso3() {
+                let textoIntroducido = document.getElementById("respuesta3").value.trim();
+                if (textoIntroducido.toLowerCase() === paso3.toLowerCase()) {
+                    document.getElementById("contenedorPaso3").innerHTML = '<p class="paso-completado">' + textoIntroducido + '</p>';
+                    limpiarAyudaYPasar(4);
+                    document.getElementById("contenedorPaso4").style.display = "block";
+                } else { gestionarFallo(); }
+            }
+
+            function comprobarPaso4() {
+				let textoIntroducido = document.getElementById("respuesta4").value.trim();
+				if (textoIntroducido.toLowerCase() === paso4.toLowerCase()) {
+					document.getElementById("contenedorPaso4").innerHTML = '<p class="paso-completado">' + document.getElementById("respuesta4").value.trim() + '</p>';
+					limpiarAyudaYPasar("sol");
+					document.getElementById("contenedorSolucion").style.display = "block";
+				} else { gestionarFallo(); }
+			}
+            
+            function comprobarSolucion() {
+				let textoIntroducido = document.getElementById("solucion").value.trim();
+				if (textoIntroducido === solucion) {
+					document.getElementById("contenedorSolucion").innerHTML = '<p class="paso-completado">x = ' + textoIntroducido + '</p>';
+					limpiarAyudaYPasar("fin");
+					parrafoMensaje.textContent = "¡Correcto! Has resuelto la ecuación completa.";
+					parrafoMensaje.className = "correcto";
+				} else { gestionarFallo(); }
+			}
+        </script>
+    </body>
+</html>

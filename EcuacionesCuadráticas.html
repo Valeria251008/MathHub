@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<title>Propiedades de los Logarítmos</title>
+        <meta charset="UTF-8">
+        <style>
+			 * {
+				margin:0px;
+			}
+			
+            .correcto { color: green; font-weight: bold; }
+            .incorrecto { color: red; }
+            .paso-completado { font-weight: bold; color: #333; margin: 10px 0; }
+            .ayuda-texto { color: #555; font-style: italic; background: #f9f9f9; padding: 5px; border-left: 3px solid #ffd700; margin: 10px 0; }
+            #btnAyuda { background-color: #ffd700; border: 1px solid #ccc; cursor: pointer; display: none; margin-left: 10px; }
+            
+            #cabecera{
+				text-align:center;
+				background-color:cornflowerblue;
+				padding:20px;
+			}
+			
+			#menu{
+				text-align:center;
+				padding:20px;
+				background-color:white;
+			}
+            
+            #contenido{
+				border:2px solid blue;
+				border-radius: 20px;
+				padding:20px;
+				margin:20px;
+				text-align:center;
+				background-color:white;
+			}
+			
+			body {
+			  font-family: "Delius", cursive;
+			  font-weight: 400;
+			  font-style: normal;
+			  background-image: url('fondo_matematicas.png');
+
+			}
+			
+			p,button {
+				margin:8px;
+			}
+        </style>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Delius&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <div id="cabecera">
+            <h1>Ecuaciones Cuadráticas</h1>
+        </div>
+        <div id="menu">
+            <a href="Ecuaciones.html">Ecuaciones</a>
+        </div>
+        <div id="contenido"> 
+			<p>Resuelve la ecuación utilizando el cambio de variable x²=t</p>   
+            <p><strong>x⁴-11x²+28=0</strong></p>
+
+            <div id="contenedorPaso1">
+                <input type="text" id="respuesta1" placeholder="Escribe aquí tu respuesta">
+                <button onclick="comprobarPaso1()">Comprobar</button>
+            </div>
+            
+            <p><strong>Soluciones:</strong></p>
+            
+            <div id="contenedorSolucion1" style="display: none;">
+                <input type="text" id="solucion1" placeholder="Primera solución">
+                <button onclick="comprobarSolucion1()">Comprobar</button>
+            </div>
+            
+            <div id="contenedorSolucion2" style="display: none;">
+                <input type="text" id="solucion2" placeholder="Segunda solución">
+                <button onclick="comprobarSolucion2()">Comprobar</button>
+            </div>
+            
+            <div id="contenedorSolucion3" style="display: none;">
+                <input type="text" id="solucion3" placeholder="Tercera solución">
+                <button onclick="comprobarSolucion3()">Comprobar</button>
+            </div>
+            
+            <div id="contenedorSolucion4" style="display: none;">
+                <input type="text" id="solucion4" placeholder="Cuarta solución">
+                <button onclick="comprobarSolucion4()">Comprobar</button>
+            </div>
+            
+            <button id="btnAyuda" onclick="mostrarAyuda()">¿Necesitas ayuda?</button>
+            <p id="textoAyuda" class="ayuda-texto" style="display: none;"></p>
+
+            <p id="mensaje"></p>
+        </div>
+
+        <script>
+            // Respuestas correctas
+            const paso1 = "t²-11t+28=0"; 
+            var soluciones = ["-√7", "√7","-2","2"];
+            
+            var pistas = {
+                1: "Pista: Realiza el cambio de variable x²=t.",
+                "sol": "Pista: Resuelve la ecuación de segundo grado usando la fórmula general. ¡Cuidado! Tienes que deshacer el cambio de variable."
+            };
+            
+            let pasoActual = 1; 
+            let parrafoMensaje = document.getElementById("mensaje");
+            let btnAyuda = document.getElementById("btnAyuda");
+            let areaAyuda = document.getElementById("textoAyuda");
+
+            function mostrarAyuda() {
+                areaAyuda.textContent = pistas[pasoActual] || pistas["sol"];
+                areaAyuda.style.display = "block";
+            }
+
+            function gestionarFallo() {
+                parrafoMensaje.textContent = "Incorrecto. Inténtalo de nuevo.";
+                parrafoMensaje.className = "incorrecto";
+                btnAyuda.style.display = "inline-block"; 
+            }
+
+            function limpiarAyudaYPasar(siguientePaso) {
+                parrafoMensaje.textContent = "";
+                btnAyuda.style.display = "none";    
+                areaAyuda.style.display = "none";   
+                pasoActual = siguientePaso;         
+            }
+
+            function comprobarPaso1() {
+                let textoIntroducido = document.getElementById("respuesta1").value.trim();
+                if (textoIntroducido.toLowerCase() === paso1.toLowerCase()) {
+                    document.getElementById("contenedorPaso1").innerHTML = '<p class="paso-completado">' + textoIntroducido + '</p>';
+                    limpiarAyudaYPasar("sol");
+                    document.getElementById("contenedorSolucion1").style.display = "block";
+                } else { gestionarFallo(); }
+            }
+
+            function comprobarSolucion1() {
+                let textoIntroducido = document.getElementById("solucion1").value.trim();
+                let indice = soluciones.indexOf(textoIntroducido);
+                if (indice !== -1) {
+                    soluciones.splice(indice, 1);
+                    document.getElementById("contenedorSolucion1").innerHTML = '<p class="paso-completado">' + textoIntroducido + '</p>';
+                    limpiarAyudaYPasar("sol");
+                    document.getElementById("contenedorSolucion2").style.display = "block";
+                } else { gestionarFallo(); }
+            }
+            
+            function comprobarSolucion2() {
+                let textoIntroducido = document.getElementById("solucion2").value.trim();
+                let indice = soluciones.indexOf(textoIntroducido);
+                if (indice !== -1) {
+                    soluciones.splice(indice, 1);
+                    document.getElementById("contenedorSolucion2").innerHTML = '<p class="paso-completado">' + textoIntroducido + '</p>';
+                    limpiarAyudaYPasar("sol");
+                    document.getElementById("contenedorSolucion3").style.display = "block";
+                } else { gestionarFallo(); }
+            }
+            
+            function comprobarSolucion3() {
+                let textoIntroducido = document.getElementById("solucion3").value.trim();
+                let indice = soluciones.indexOf(textoIntroducido);
+                if (indice !== -1) {
+                    soluciones.splice(indice, 1);
+                    document.getElementById("contenedorSolucion3").innerHTML = '<p class="paso-completado">' + textoIntroducido + '</p>';
+                    limpiarAyudaYPasar("sol");
+                    document.getElementById("contenedorSolucion4").style.display = "block";
+                } else { gestionarFallo(); }
+            }
+
+            function comprobarSolucion4() {
+                let textoIntroducido = document.getElementById("solucion4").value.trim();
+                if (soluciones.includes(textoIntroducido)) {
+                    document.getElementById("contenedorSolucion4").innerHTML = '<p class="paso-completado">' + textoIntroducido + '</p>';
+                    limpiarAyudaYPasar("fin");
+                    parrafoMensaje.textContent = "¡Correcto! Has resuelto la ecuación completa.";
+                    parrafoMensaje.className = "correcto";
+                } else { gestionarFallo(); }
+            }
+        </script>
+    </body>
+</html>
+
